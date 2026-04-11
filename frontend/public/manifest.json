@@ -1,0 +1,65 @@
+{
+  "name": "O-229 Marketplace",
+  "short_name": "O-229",
+  "description": "La marketplace leader au Bénin. Achetez et vendez directement via WhatsApp avec des analyses de performance.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#10b981",
+  "categories": ["shopping", "business"],
+  "lang": "fr-BJ",
+  "dir": "ltr",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/icons/icon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/icon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "/icons/icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "/screenshots/mobile.png",
+      "sizes": "1024x1792",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "Interface Mobile O-229"
+    },
+    {
+      "src": "/screenshots/desktop.png",
+      "sizes": "1792x1024",
+      "type": "image/png",
+      "form_factor": "wide",
+      "label": "Interface Desktop O-229"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Rechercher des produits",
+      "short_name": "Rechercher",
+      "description": "Recherchez rapidement des articles",
+      "url": "/search",
+      "icons": [{ "src": "/icons/icon-192x192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Mes Favoris",
+      "short_name": "Favoris",
+      "description": "Accédez à vos produits sauvegardés",
+      "url": "/favorites",
+      "icons": [{ "src": "/icons/icon-192x192.png", "sizes": "192x192" }]
+    }
+  ]
+}
