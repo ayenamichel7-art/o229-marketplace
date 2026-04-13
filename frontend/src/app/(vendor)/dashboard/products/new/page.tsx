@@ -41,19 +41,20 @@ export default function NewProductPage() {
       const filesArray = Array.from(e.target.files);
       setSelectedImages((prev) => [...prev, ...filesArray]);
       
-      // Generate previews
-      const newPreviews = filesArray.map(file => URL.createObjectURL(file));
-      setImagePreviews((prev) => [...prev, ...newPreviews]);
+      // Generate base64 previews (safer for CodeQL than blob URLs)
+      filesArray.forEach(file => {
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          setImagePreviews((prev) => [...prev, reader.result as string]);
+        };
+        reader.readAsDataURL(file);
+      });
     }
   };
 
   const removeImage = (index: number) => {
     setSelectedImages((prev) => prev.filter((_, i) => i !== index));
-    setImagePreviews((prev) => {
-      // Release memory
-      URL.revokeObjectURL(prev[index]);
-      return prev.filter((_, i) => i !== index);
-    });
+    setImagePreviews((prev) => prev.filter((_, i) => i !== index));
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -287,7 +288,7 @@ export default function NewProductPage() {
                   {imagePreviews.map((src, idx) => (
                     <div key={idx} className="relative group rounded-xl overflow-hidden border border-base-200 aspect-square">
                       <img 
-                        src={src.startsWith('blob:') ? src : ''} 
+                        src={src} 
                         alt="Preview" 
                         className="w-full h-full object-cover" 
                       />
