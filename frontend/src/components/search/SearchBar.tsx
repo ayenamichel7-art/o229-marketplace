@@ -142,7 +142,7 @@ export function SearchBar({ className = "", isHero = false }: SearchBarProps) {
               </ul>
               <div className="border-t border-base-200 p-2 bg-base-200/50">
                 <Link 
-                  href={`/search?q=${query}&city=${city}`} 
+                  href={`/search?q=${encodeURIComponent(query)}&city=${encodeURIComponent(city)}`} 
                   className="btn btn-sm btn-ghost w-full text-primary"
                   onClick={() => setShowDropdown(false)}
                 >

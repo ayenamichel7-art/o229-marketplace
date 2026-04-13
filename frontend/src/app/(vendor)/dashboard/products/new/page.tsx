@@ -286,7 +286,11 @@ export default function NewProductPage() {
                 <div className="grid grid-cols-2 gap-3 mt-4">
                   {imagePreviews.map((src, idx) => (
                     <div key={idx} className="relative group rounded-xl overflow-hidden border border-base-200 aspect-square">
-                      <img src={src} alt="Preview" className="w-full h-full object-cover" />
+                      <img 
+                        src={src.startsWith('blob:') ? src : ''} 
+                        alt="Preview" 
+                        className="w-full h-full object-cover" 
+                      />
                       <button 
                         type="button"
                         onClick={() => removeImage(idx)}
