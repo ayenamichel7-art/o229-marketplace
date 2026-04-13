@@ -29,12 +29,17 @@ class CyberCerberusHoneypot
 
         foreach ($traps as $trap) {
             if ($request->is($trap) || $request->is($trap . '/*')) {
+                // Sanitize user-controlled data before logging
+                $safePath = preg_replace('/[\x00-\x1F\x7F]/', '', mb_substr($request->path(), 0, 255));
+                $safeUserAgent = preg_replace('/[\x00-\x1F\x7F]/', '', mb_substr($request->userAgent() ?? 'unknown', 0, 500));
+                $safeIp = filter_var($request->ip(), FILTER_VALIDATE_IP) ?: 'invalid';
+
                 // Log l'intrusion
                 AuditLog::create([
                     'action' => 'HONEYPOT_TRIGGERED',
-                    'description' => "Tentative d'accès au chemin interdit : " . $request->path(),
-                    'ip_address' => $request->ip(),
-                    'user_agent' => $request->userAgent(),
+                    'description' => "Tentative d'accès au chemin interdit : " . $safePath,
+                    'ip_address' => $safeIp,
+                    'user_agent' => $safeUserAgent,
                     'metadata' => [
                         'method' => $request->method(),
                         'input' => $request->all()
@@ -45,14 +50,17 @@ class CyberCerberusHoneypot
                 try {
                     app(\App\Services\SystemHealthService::class)->notifySecurityAlert(
                         "Honeypot Déclenché !",
-                        "Un scanner/robot a tenté d'accéder au chemin piège : " . $request->path(),
-                        ['UserAgent' => $request->userAgent()]
+                        "Un scanner/robot a tenté d'accéder au chemin piège : " . $safePath,
+                        ['UserAgent' => $safeUserAgent]
                     );
                 } catch (\Exception $e) {
                     // Fail silently for app stability
                 }
 
-                Log::warning("CERBERUS: Honeypot triggered by IP " . $request->ip() . " on " . $request->path());
+                Log::warning('CERBERUS: Honeypot triggered', [
+                    'ip' => $safeIp,
+                    'path' => $safePath,
+                ]);
 
                 // Bloquer l'IP ou simplement retourner un 404/403 menteur
                 return response()->json(['message' => 'Not Found'], 404);

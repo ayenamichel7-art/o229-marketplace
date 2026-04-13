@@ -20,7 +20,7 @@ class DatabaseSeeder extends Seeder
             ['email' => 'admin@o-229.com'],
             [
                 'name' => 'Admin O-229',
-                'password' => bcrypt('Admin@2024!Secure'),
+                'password' => bcrypt(env('ADMIN_DEFAULT_PASSWORD', \Illuminate\Support\Str::random(32))),
                 'role' => Role::Admin,
                 'phone' => '+22960000000',
                 'is_active' => true,

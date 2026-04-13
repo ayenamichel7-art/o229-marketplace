@@ -144,7 +144,7 @@ services:
       - "127.0.0.1:5050:80"
     environment:
       PGADMIN_DEFAULT_EMAIL: admin@o229.com
-      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_PASSWORD:-o229_admin_secret}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_PASSWORD}
     depends_on:
       postgres:
         condition: service_healthy
@@ -178,7 +178,7 @@ services:
     environment:
       - SERVER_URL=http://evolution_api:8080
       - AUTHENTICATION_TYPE=apikey
-      - AUTHENTICATION_API_KEY=${WA_API_KEY:-o229_wa_secret_key}
+      - AUTHENTICATION_API_KEY=${WA_API_KEY}
       - STORE_MESSAGES=true
       - STORE_CONTACTS=true
       - SESSIONS_TYPE=redis

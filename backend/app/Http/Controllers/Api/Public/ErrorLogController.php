@@ -19,18 +19,20 @@ class ErrorLogController extends Controller
         ]);
 
         // Create a fake exception to reuse the existing notification service
-        $exception = new \Exception($request->message);
+        $sanitizedMessage = str_replace(["\r", "\n", "\t"], ' ', $request->message);
+        $exception = new \Exception($sanitizedMessage);
         
-        // Log it locally too
-        \Log::warning("Frontend Error: " . $request->message, [
-            'stack' => $request->stack,
-            'url' => $request->url,
-            'component' => $request->component,
+        // Log it locally too — use structured context to prevent log injection
+        \Log::warning("Frontend Error reported", [
+            'message' => $sanitizedMessage,
+            'stack' => $request->stack ? mb_substr($request->stack, 0, 2000) : null,
+            'url' => $request->url ? filter_var($request->url, FILTER_SANITIZE_URL) : null,
+            'component' => $request->component ? mb_substr($request->component, 0, 100) : null,
             'ip' => $request->ip()
         ]);
 
         // Notify Discord
-        $healthService->notifyError($exception, 'Frontend (' . ($request->component ?? 'Generic') . ')');
+        $healthService->notifyError($exception, 'Frontend (' . mb_substr(($request->component ?? 'Generic'), 0, 50) . ')');
 
         return response()->json(['status' => 'logged']);
     }
