@@ -11,7 +11,9 @@ const withPWA = withPWAInit({
 
 const nextConfig: NextConfig = {
   /* config options here */
-  reactCompiler: true,
+  experimental: {
+    reactCompiler: true,
+  },
   output: "standalone",
   turbopack: {},
   eslint: {

@@ -27,7 +27,7 @@ import {
   Tooltip,
   ResponsiveContainer,
 } from "recharts";
-import { toast } from "react-hot-toast";
+import { toast } from "sonner";
 
 export default function VendorDashboard() {
   const { data, isLoading } = useQuery({
@@ -39,8 +39,8 @@ export default function VendorDashboard() {
   });
 
   const handleDownloadReport = async () => {
+    const toastId = toast.loading("Génération du rapport...");
     try {
-      toast.loading("Génération du rapport...", { id: "report" });
       const response = await api.get("/vendor/analytics/report", { 
         responseType: 'blob' 
       });
@@ -52,10 +52,10 @@ export default function VendorDashboard() {
       document.body.appendChild(link);
       link.click();
       link.remove();
-      toast.success("Rapport téléchargé !", { id: "report" });
+      toast.success("Rapport téléchargé !", { id: toastId });
     } catch (error) {
       console.error(error);
-      toast.error("Échec de la génération.", { id: "report" });
+      toast.error("Échec de la génération.", { id: toastId });
     }
   };
 
