@@ -166,6 +166,7 @@ export default function AdminVendorsPage() {
                          <a 
                           href={shop.kyc_document} 
                           target="_blank" 
+                          rel="noopener noreferrer"
                           className="p-2 text-slate-400 hover:text-primary hover:bg-primary/5 rounded-xl transition-all"
                           title="Voir le document KYC"
                          >
